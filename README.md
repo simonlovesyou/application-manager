@@ -34,7 +34,7 @@ Will run the callback or return a promise with the result of all running applica
 
 **Example**:
 ```js
-runningApplications()
+appManager.runningApplications()
 .then(res => {
   console.log(res); //An array with the names of the running applications
 })
@@ -45,7 +45,7 @@ runningApplications()
 **Example**:
 ```js
 //Regular callbacks
-runningApplications((err, res) => {
+appManager.runningApplications((err, res) => {
   if(err) {
     console.log(err);
   }
@@ -55,7 +55,7 @@ runningApplications((err, res) => {
 **Example**:
 ```js
 //Pass in background option to include background applications
-runningApplications({background: true}) //default false
+appManager.runningApplications({background: true}) //default false
 .then(res => {
   console.log(res); //An array with the names of the running applications, including applications running in the background
 })
@@ -78,7 +78,7 @@ Will run the provided callback or return a promise with a boolean if the applica
 
 **Example**:
 ```js
-isOpen('Spotify')
+appManager.isOpen('Spotify')
 .then((isOpen) => {
   //Do whatever with this information 
 })
@@ -102,7 +102,7 @@ Will quit the specified application/s
 
 **Example**:
 ```js
-quit(['Spotify', 'Slack'])
+appManager.quit(['Spotify', 'Slack'])
 .then(() => {
   //The applications has exited 
 })
@@ -128,7 +128,7 @@ For applications where this is not possible it will simply hide the application 
 
 **Example**:
 ```js
-minimize('Safari')
+appManager.minimize('Safari')
 .then(() => {
   //Safari has now been minimized
 })
@@ -136,7 +136,7 @@ minimize('Safari')
 ```
 **Example**:
 ```js
-minimize('Spotify')
+appManager.minimize('Spotify')
 .then(() => {
   //Spotify and some applications can't be minimized, will be hidden instead (PR's welcome to fix this)
 })
@@ -157,7 +157,7 @@ Will bring the specified application to focus
 
 **Example**:
 ```js
-focus('Safari')
+appManager.focus('Safari')
 .then(() => {
   //Safari has now been focused. 
 })
