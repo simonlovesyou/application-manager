@@ -26,6 +26,8 @@ Will run the callback or return a promise with the result of all running applica
 
 **options**: `object`, The option object
 
+**options.background**: `boolean`, (OPTIONAL) If background processes should be included
+
 **cb**: `function`, The callback to be executed with the result
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
