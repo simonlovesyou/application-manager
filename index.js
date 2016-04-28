@@ -1,7 +1,7 @@
 /**
- * @title window-manager
- * @module win
- * @description A small wrapper around osascript/applescript to be able to manage applications.
+ * @title application-manager
+ * @module appManager
+ * @description A small wrapper around osascript/applescript to be able to easily manage applications.
  * 
  * Install via npm 
  * 
@@ -12,7 +12,7 @@
  * Then require it in your application
  * 
  * ```js
- * const win = require('window-manager');
+ * const appManager = require('window-manager');
  * ```
  * @author Simon Johansson <@simonlovesyou>
  * @license MIT
@@ -43,7 +43,6 @@ const applescript = p.promisifyAll(require('applescript'));
  *   console.log(res); //An array with the names of the running applications
  * });
  * 
- * @example
  * //Pass in background option to include background applications
  * runningApplications({background: true})
  * .then(res => {

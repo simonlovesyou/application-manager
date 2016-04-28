@@ -1,7 +1,7 @@
 {
-  "name": "window-manager",
+  "name": "application-manager",
   "version": "1.0.0",
-  "description": "A wrapper around some applescripts to retrieve information about running processes",
+  "description": "A small wrapper around osascript/applescript to be able to manage applications.",
   "main": "index.js",
   "scripts": {
     "test": "npm test"

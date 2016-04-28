@@ -1,24 +1,24 @@
-# win
+# application-manager
 
 A small wrapper around osascript/applescript to be able to manage applications.
 
 Install via npm 
 
 ```
-npm install window-manager --save
+npm install application-manager --save
 ```
 
 Then require it in your application
 
 ```js
-const win = require('window-manager');
+const appManager = require('application-manager');
 ```
 
 
 
 ##Documentation
 
-### win.runningApplications(options, cb) 
+### appManager.runningApplications(options, cb) 
 
 Will run the callback or return a promise with the result of all running applications
 
@@ -64,7 +64,7 @@ runningApplications({background: true}) //default false
 });
 ```
 
-### win.isOpen(application, cb) 
+### appManager.isOpen(application, cb) 
 
 Will run the provided callback or return a promise with a boolean if the application is running or not.
 
@@ -88,7 +88,7 @@ isOpen('Spotify')
 ```
 
 
-### win.quit(application, cb) 
+### appManager.quit(application, cb) 
 
 Will quit the specified application/s
 
@@ -112,7 +112,7 @@ quit(['Spotify', 'Slack'])
 ```
 
 
-### win.minimize(application, cb) 
+### appManager.minimize(application, cb) 
 
 Will minimize or hide the specified application/s.
 Some applications can't be asked to minimized due to their implementation. 
@@ -143,7 +143,7 @@ minimize('Spotify')
 .catch(err => err) //Handle error
 ```
 
-### win.focus(application, cb) 
+### appManager.focus(application, cb) 
 
 Will bring the specified application to focus
 
