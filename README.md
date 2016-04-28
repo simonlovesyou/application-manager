@@ -37,71 +37,30 @@ runningApplications()
   console.log(res); //An array with the names of the running applications
 })
 .catch(err => {
-  console.log(err);
-});,//Or just use regular callbacks
-runningApplications((err, res) => {
-  if(err) {
-    console.log(err);
-  }
-  console.log(res); //An array with the names of the running applications
-});,//Pass in background option to include background applications
-runningApplications({background: true})
-.then(res => {
-  console.log(res); //An array with the names of the running applications, including applications running in the background
-})
-.catch(err => {
-  console.log(err);
+  //Handle error
 });
 ```
-
 **Example**:
 ```js
-runningApplications()
-.then(res => {
-  console.log(res); //An array with the names of the running applications
-})
-.catch(err => {
-  console.log(err);
-});,//Or just use regular callbacks
+//Regular callbacks
 runningApplications((err, res) => {
   if(err) {
     console.log(err);
   }
   console.log(res); //An array with the names of the running applications
-});,//Pass in background option to include background applications
-runningApplications({background: true})
-.then(res => {
-  console.log(res); //An array with the names of the running applications, including applications running in the background
-})
-.catch(err => {
-  console.log(err);
 });
 ```
-
 **Example**:
-```javascript
-runningApplications()
-.then(res => {
-  console.log(res); //An array with the names of the running applications
-})
-.catch(err => {
-  console.log(err);
-});,//Or just use regular callbacks
-runningApplications((err, res) => {
-  if(err) {
-    console.log(err);
-  }
-  console.log(res); //An array with the names of the running applications
-});,//Pass in background option to include background applications
-runningApplications({background: true})
+```js
+//Pass in background option to include background applications
+runningApplications({background: true}) //default false
 .then(res => {
   console.log(res); //An array with the names of the running applications, including applications running in the background
 })
 .catch(err => {
-  console.log(err);
+  //Handle error
 });
 ```
-
 
 ### win.isOpen(application, cb) 
 
@@ -122,7 +81,7 @@ isOpen('Spotify')
   //Do whatever with this information 
 })
 .catch(err => {
-  //Handle the error
+  //Handle error
 });
 ```
 
@@ -146,7 +105,7 @@ quit(['Spotify', 'Slack'])
   //The applications has exited 
 })
 .catch(err => {
-   //Handle any error
+   //Handle error
 });
 ```
 
@@ -171,26 +130,16 @@ minimize('Safari')
 .then(() => {
   //Safari has now been minimized
 })
-.catch(err => err) //Handle the error,minimize('Spotify')
-.then(() => {
-  //Spotify can't be minimized, will be hidden instead
-})
-.catch(err => err) //Handle error
+.catch(err => err) //Handle error,
 ```
-
 **Example**:
 ```js
-minimize('Safari')
+minimize('Spotify')
 .then(() => {
-  //Safari has now been minimized
-})
-.catch(err => err) //Handle the error,minimize('Spotify')
-.then(() => {
-  //Spotify can't be minimized, will be hidden instead
+  //Spotify and some applications can't be minimized, will be hidden instead (PR's welcome to fix this)
 })
 .catch(err => err) //Handle error
 ```
-
 
 ### win.focus(application, cb) 
 
@@ -203,6 +152,15 @@ Will bring the specified application to focus
 **cb**: `function`, The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
+
+**Example**:
+```js
+focus('Safari')
+.then(() => {
+  //Safari has now been focused. 
+})
+.catch(err => err) //Handle error
+```
 
 ## License
 MIT, see [LICENSE](LICENSE)
