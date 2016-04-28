@@ -1,0 +1,17 @@
+{
+  "name": "window-manager",
+  "version": "1.0.0",
+  "description": "A wrapper around some applescripts to retrieve information about running processes",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm test"
+  },
+  "author": "simonlovesyou",
+  "license": "MIT",
+  "keywords": ["window", "manager", "application", "applications"],
+  "dependencies": {
+    "applescript": "^1.0.0",
+    "bluebird": "^3.3.5",
+    "jsdox": "^0.4.9"
+  }
+}
