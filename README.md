@@ -26,9 +26,9 @@ Will run the callback or return a promise with the result of all running applica
 
 **options**: `object`, The option object
 
-**options.background**: `boolean`, (OPTIONAL) If background processes should be included
+**options.background**: `boolean`, `(OPTIONAL)` If background processes should be included
 
-**cb**: `function`, The callback to be executed with the result
+**cb**: `function`, `(OPTIONAL)` The callback to be executed with the result
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -72,7 +72,7 @@ Will run the provided callback or return a promise with a boolean if the applica
 
 **application**: `string`, The application to be checked if it's running or not
 
-**cb**: `function`, The callback to be executed with the result
+**cb**: `function`, `(OPTIONAL)` The callback to be executed with the result
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -96,7 +96,7 @@ Will quit the specified application/s
 
 **application**: `string | array`, The array or the string of the application/s to quit
 
-**cb**: `function`, The callback to be executed when it's done.
+**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -122,7 +122,7 @@ For applications where this is not possible it will simply hide the application 
 
 **application**: `string`, The application to minimize or hide.
 
-**cb**: `function`, The callback to be executed when it's done.
+**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -151,7 +151,7 @@ Will bring the specified application to focus
 
 **application**: `string`, The application to minimize or hide.
 
-**cb**: `function`, The callback to be executed when it's done.
+**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
