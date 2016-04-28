@@ -230,7 +230,7 @@ const focus = (application, cb) => {
 }
 
 module.exports = {
-  openApplications,
+  runningApplications,
   isOpen,
   quit,
   minimize,
