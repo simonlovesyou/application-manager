@@ -68,10 +68,10 @@ test.cb('minimize callback', t => {
   appManager.quit('', t.end);
 });
 
-
-test('minimize args', async t => {
+//This test has to run first. If breaks runningApplications function otherwise.
+test.serial('minimize args', async t => {
   t.throws(await appManager.minimize([]), Error);
-  t.throws(() => appManager.minimize({}, 'string'), Error);
+  t.throws(() => appManager.minimize('app', {all: false}, {}), Error);
 });
 
 /**
