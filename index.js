@@ -22,6 +22,7 @@
 
 const p = require('bluebird');
 const applescript = p.promisifyAll(require('applescript'));
+const path = require('path');
 
 /**
  * @description Will run the callback or return a promise with the result of all running applications
@@ -59,17 +60,25 @@ const applescript = p.promisifyAll(require('applescript'));
 
 const runningApplications = (options = {}, cb) => {
 
+  //If option parameter is omitted
   if(typeof options === 'function' && cb === undefined) {
     cb = options;
     options = {};
   }
   if(typeof cb !== 'function' && typeof cb !== 'undefined') {
-    let err = new Error('Callback parameter is not a function, got ' + typeof application);
+    console.log("hej");
+    let err = new Error('Callback parameter is not a function, got ' + typeof options);
     throw err;
   } 
-  if(typeof options !== 'object' && options !== undefined) {
-    let err = new Error('Options parameter is not an object, got ' + typeof application);
-    return cb(err);
+  if(typeof options !== 'object' && options !== undefined || options instanceof Array) {
+    let err = new Error('Options parameter is not an object, got ' + (options instanceof Array ? 'array' : typeof options));
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
+    }
   }
 
   let background = options.background || false;
@@ -78,16 +87,27 @@ const runningApplications = (options = {}, cb) => {
                     set listOfProcesses to (name of every process where background only is ${background})
                   end tell
                   return [listOfProcesses]`;
-  if(cb) {
-    return applescript.execString(script, (err, res) => {
-      if(err) {
-        return cb(err);
-      }
-      return cb(res[0]);
-    });
-  }
+
+  //console.log(script);
+
   return applescript.execStringAsync(script)
-         .then(res => res[0]);
+  .then(res => {
+    if(!res) {
+      throw new Error('Could not get running applications.');
+    }
+    //The result is an nested array, so we flatten the result. 
+    res = res[0];
+    if(cb) {
+      cb(null, res);
+    }
+    return res;
+  })
+  .catch(err => {
+    if(cb) {
+      cb(err);
+    }
+    return err;
+  });
 }
 
 /**
@@ -107,28 +127,39 @@ const runningApplications = (options = {}, cb) => {
 
 const isOpen = (application, cb) => {
 
-  if(typeof cb !== 'function') {
+  //If option parameter is omitted
+  if(typeof cb !== 'function' && cb !== undefined) {
     let err = new Error('Callback parameter is not a function, got ' + typeof application);
     throw err;
   } 
   if(typeof application !== 'string') {
     let err = new Error('Application parameter is not a string, got ' + typeof application);
-    return cb(err);
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
+    }
   }
 
 
   const script = `tell application "System Events" to (name of processes) contains "${application}"`;
 
-  if(cb) {
-    return applescript.execString(script, (err, res) => {
-      if(err) {
-        return cb(err);
-      }
-      return cb(res[0]);
-    });
-  }
-
   return applescript.execStringAsync(script)
+  .then(res => {
+    res = res === 'true';
+    if(cb) {
+      cb(null, res);
+    }
+    return res;
+  })
+  .catch(err => {
+    if(cb) {
+      cb(res);
+    }
+    return err;
+  });
 }
 
 /**
@@ -147,6 +178,23 @@ const isOpen = (application, cb) => {
  **/
 
 const quit = (application, cb) => {
+
+  if(typeof cb !== 'function' && typeof cb !== 'undefined') {
+    let err = new Error('Callback parameter is not a function, got ' + typeof application);
+    throw err;
+  } 
+
+  if(typeof application !== 'string' && !application instanceof Array) {
+    let err = new Error('Application parameter is not a string, got ' + typeof application);
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
+    }
+  }
+
   if(application instanceof Array) {
     let applications = application.map((app, i) => ('"' + app + '"'));
     let script = `set applicationList to {${applications}}
@@ -158,10 +206,19 @@ const quit = (application, cb) => {
 
   let script = `tell application "${application}" to quit`
 
-  if(cb) {
-    return applescript.execString(script, cb);
-  }
-  return applescript.execStringAsync(script);
+  applescript.execStringAsync(script)
+  .then(() => {
+    if(cb) {
+      return cb(null);
+    }
+    return; 
+  })
+  .catch(err => {
+    if(cb) {
+      return cb(err);
+    }
+    return err;
+  });
 }
 
 /**
@@ -191,29 +248,46 @@ const minimize = (application, cb) => {
                      set miniaturized of window 1 to true
                   end tell`;
 
-  return applescript.execString(script, (err) => {
-    if(err) {
+  if(typeof cb !== 'function' && cb !== undefined) {
+    throw new Error('Callback parameter is not a function, got ', typeof cb);
+  }
 
-      //Couldn't use this method to minimize application.
-      //Hide the application instead.
-
-      const hide = `tell application "System Events" to tell process "${application}" to set visible to false`;
-
-      if(cb) {
-        return applescript.execString(hide, err => cb(err)); 
-      }
-      return applescript.execStringAsync(script);
+  if(typeof application !== 'string') {
+    let err = new Error('Application parameter is not a string, got ', typeof application);
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
     }
+  }
+
+  return applescript.execStringAsync(script)
+  .then(() => {
     if(cb) {
-      return applescript.execString(hide, cb); 
+      cb();
     }
-    return applescript.execStringAsync(script);
+    return;
+  })
+  .catch((err) => {
+    const hide = `tell application "System Events" to tell process "${application}" to set visible to false`;
+    if(cb) {
+      return applescript.execString(hide, err => cb(err));
+    }
+    return applescript.execStringAsync(hide);
   });
 }
 
 /**
  * @description Will bring the specified application to focus
  * 
+ * @example
+ * focus('Terminal')
+ * .then(() => {
+ *   //Terminal has now been minimized
+ * })
+ * .catch(err => err) //Handle error
  * @param {string} application - The application to minimize or hide. 
  * @param {function} cb - The callback to be executed when it's done.
  * @return {Promise|undefined} A promise with the result or undefined
@@ -221,12 +295,37 @@ const minimize = (application, cb) => {
 
 const focus = (application, cb) => {
 
+  if(typeof cb !== 'function' && cb !== undefined) {
+    throw new Error('Callback parameter is not a function, got ', typeof cb);
+  }
+
+  if(typeof application !== 'string') {
+    let err = new Error('Application parameter is not a string, got ', typeof application);
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
+    }
+  }
+
   const script = `tell application "${application}" to activate`;
 
-  if(cb) {
-    return applescript.execString(hide, cb); 
-  }
-  return applescript.execStringAsync(script);
+
+  applescript.execStringAsync(script)
+  .then(() => {
+    if(cb) {
+      return cb(null);
+    }
+    return; 
+  })
+  .catch(err => {
+    if(cb) {
+      return cb(err);
+    }
+    return err;
+  });
 }
 
 module.exports = {
