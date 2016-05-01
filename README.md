@@ -14,21 +14,19 @@ Then require it in your application
 const appManager = require('application-manager');
 ```
 
-
-
 ##Documentation
 
-### appManager.runningApplications(options, cb) 
+### appManager.runningApplications([options [, callback]]) 
 
 Will run the callback or return a promise with the result of all running applications
 
 **Parameters**
 
-**options**: `object`, The option object
+**options**: `object`, `(OPTIONAL)` The option object
 
 **options.background**: `boolean`, `(OPTIONAL)` If background processes should be included
 
-**cb**: `function`, `(OPTIONAL)` The callback to be executed with the result
+**callback**: `function`, `(OPTIONAL)` The callback to be executed with the result
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -64,7 +62,7 @@ appManager.runningApplications({background: true}) //default false
 });
 ```
 
-### appManager.isOpen(application, cb) 
+### appManager.isOpen(application [, callback]) 
 
 Will run the provided callback or return a promise with a boolean if the application is running or not.
 
@@ -72,7 +70,7 @@ Will run the provided callback or return a promise with a boolean if the applica
 
 **application**: `string`, The application to be checked if it's running or not
 
-**cb**: `function`, `(OPTIONAL)` The callback to be executed with the result
+**callback**: `function`, `(OPTIONAL)` The callback to be executed with the result
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -88,7 +86,7 @@ appManager.isOpen('Spotify')
 ```
 
 
-### appManager.quit(application, cb) 
+### appManager.quit(application [, callback]) 
 
 Will quit the specified application/s
 
@@ -96,7 +94,7 @@ Will quit the specified application/s
 
 **application**: `string | array`, The array or the string of the application/s to quit
 
-**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
+**callback**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -112,7 +110,7 @@ appManager.quit(['Spotify', 'Slack'])
 ```
 
 
-### appManager.minimize(application, cb) 
+### appManager.minimize(application, [options [, callback]]) 
 
 Will minimize or hide the specified application/s.
 Some applications can't be asked to minimized due to their implementation. 
@@ -122,7 +120,11 @@ For applications where this is not possible it will simply hide the application 
 
 **application**: `string`, The application to minimize or hide.
 
-**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
+**options**: `object`, `(OPTIONAL)` Minimize options
+
+**options.all**: `boolean`, `(OPTIONAL)` If all windows of the application should be minimized
+
+**callback**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 
@@ -143,7 +145,7 @@ appManager.minimize('Spotify')
 .catch(err => err) //Handle error
 ```
 
-### appManager.focus(application, cb) 
+### appManager.focus(application, callback) 
 
 Will bring the specified application to focus
 
@@ -151,7 +153,7 @@ Will bring the specified application to focus
 
 **application**: `string`, The application to minimize or hide.
 
-**cb**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
+**callback**: `function`, `(OPTIONAL)` The callback to be executed when it's done.
 
 **Returns**: `Promise | undefined`, A promise with the result or undefined
 

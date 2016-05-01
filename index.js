@@ -66,7 +66,6 @@ const runningApplications = (options = {}, cb) => {
     options = {};
   }
   if(typeof cb !== 'function' && typeof cb !== 'undefined') {
-    console.log("hej");
     let err = new Error('Callback parameter is not a function, got ' + typeof options);
     throw err;
   } 
@@ -239,21 +238,27 @@ const quit = (application, cb) => {
  * })
  * .catch(err => err) //Handle error
  * @param {string} application - The application to minimize or hide. 
+ * @param {object} options - Minimize options
+ * @param {boolean} options.all - If it should hide every window or just the frontmost
  * @param {function} cb - The callback to be executed when it's done.
  * @return {Promise|undefined} A promise with the result or undefined
  **/
 
-const minimize = (application, cb) => {
-  const script = `tell application "${application}"
-                     set miniaturized of window 1 to true
-                  end tell`;
+const minimize = (application, options = {}, cb) => {
+
+
+  //If option parameter is omitted
+  if(typeof options === 'function' && cb === undefined) {
+    cb = options;
+    options = {};
+  }
 
   if(typeof cb !== 'function' && cb !== undefined) {
-    throw new Error('Callback parameter is not a function, got ', typeof cb);
+    throw new Error('Callback parameter is not a function, got ' + typeof cb);
   }
 
   if(typeof application !== 'string') {
-    let err = new Error('Application parameter is not a string, got ', typeof application);
+    let err = new Error('Application parameter is not a string, got ' + typeof application);
     if(!cb) {
       return new Promise((reject, resolve) => {
         reject(err);
@@ -262,6 +267,23 @@ const minimize = (application, cb) => {
       return cb(err);
     }
   }
+
+  if(options.all !== undefined && typeof options.all !== 'boolean') {
+    let err = new Error('Option \'all\' parameter is not a boolean, got ' + typeof options.all);
+    if(!cb) {
+      return new Promise((reject, resolve) => {
+        reject(err);
+      });
+    } else {
+      return cb(err);
+    }
+  }
+
+  let all = options.all || true;
+
+  const script = `tell application "${application}"
+                     set miniaturized of ${all ? 'every window' : 'window 1'} to true
+                  end tell`;
 
   return applescript.execStringAsync(script)
   .then(() => {
