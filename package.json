@@ -4,13 +4,21 @@
   "description": "A small wrapper around osascript/applescript to be able to manage applications.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "node_modules/.bin/ava --esnext --verbose"
   },
   "author": "simonlovesyou",
   "license": "MIT",
-  "keywords": ["window", "manager", "application", "applications"],
+  "keywords": [
+    "window",
+    "manager",
+    "application",
+    "applications"
+  ],
   "dependencies": {
     "applescript": "^1.0.0",
     "bluebird": "^3.3.5"
+  },
+  "devDependencies": {
+    "ava": "^0.14.0"
   }
 }
